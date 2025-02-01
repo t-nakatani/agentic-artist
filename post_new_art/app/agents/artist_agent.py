@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from pydantic import BaseModel
-from pydantic_ai.agent import Agent, RunContext
 
+from app.agents.agent_factory import AgentFactory
 from app.agents.prompt_organizer import prompt_organizer_agent
 from app.image_generation_prompt import ImageGenerationPrompt
 
@@ -43,10 +43,12 @@ artist_agent_system_prompt = """
     2. Fetch advice comments from adviser-db and mix them into prompt.
     3. Create an image by using the structured image-generation prompt.
 """
-artist_agent = Agent(
-    model="openai:gpt-4o-mini",
+
+artist_agent = AgentFactory.create_agent(
+    name="artist",
     system_prompt=artist_agent_system_prompt,
     tools=[generate_structured_prompt, fetch_advices, create_image],
+    result_type=Path,
 )
 
 # ------------------------------ export ------------------------------
