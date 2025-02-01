@@ -3,6 +3,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from pydantic_ai.agent import Agent, RunContext
 
+from app.agents.prompt_organizer import prompt_organizer_agent
 from app.image_generation_prompt import ImageGenerationPrompt
 
 
@@ -15,25 +16,25 @@ class ArtistPersonality(BaseModel):
 # ------------------------------ agent definition ------------------------------
 
 
-class Deps(BaseModel):
-    # adviser_db: Any
-    prompt_organizer: Agent
-
-
 def fetch_advices(prompt: str) -> list[str]:
     """fetch advice comments from adviser-db"""
     # TODO: 仮実装
     return ["アドバイス1", "アドバイス2", "アドバイス3"]
 
 
-def create_image(prompt: str) -> Path:
+def create_image(ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
+    """create an image by using prompt"""
     # TODO: Midjourneyの画像生成機能と繋げる
-    print(f"create image with prompt: {prompt}")
+    # TODO: multiple generation and select the best one
+    print(f"create image with prompt: {ImageGenerationPrompt.format()}")
     return Path("path/to/image.png")
 
 
-def run_prompt_organizer(ctx: RunContext[Deps], prompt: str) -> ImageGenerationPrompt:
-    return ctx.deps.prompt_organizer.run(prompt)
+async def generate_structured_prompt(prompt: str) -> ImageGenerationPrompt:
+    """
+    generate a structured image-generation prompt to improve the quality of prompt
+    """
+    return await prompt_organizer_agent.run(prompt)
 
 
 artist_agent_system_prompt = """
@@ -45,7 +46,7 @@ artist_agent_system_prompt = """
 artist_agent = Agent(
     model="openai:gpt-4o-mini",
     system_prompt=artist_agent_system_prompt,
-    tools=[run_prompt_organizer, fetch_advices, create_image],
+    tools=[generate_structured_prompt, fetch_advices, create_image],
 )
 
 # ------------------------------ export ------------------------------
