@@ -1,9 +1,11 @@
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from pydantic_ai import RunContext
 
 from app.agents.agent_factory import AgentFactory
 from app.agents.prompt_organizer import prompt_organizer_agent
+from app.externals.image_generater.i_image_generate_client import IImageGenerateClient
 from app.image_generation_prompt import ImageGenerationPrompt
 
 
@@ -16,18 +18,24 @@ class ArtistPersonality(BaseModel):
 # ------------------------------ agent definition ------------------------------
 
 
+class Deps(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    image_generate_client: IImageGenerateClient
+
+
 def fetch_advices(prompt: str) -> list[str]:
     """fetch advice comments from adviser-db"""
     # TODO: 仮実装
     return ["アドバイス1", "アドバイス2", "アドバイス3"]
 
 
-def create_image(ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
+def create_image(ctx: RunContext[Deps], ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
     """create an image by using prompt"""
     # TODO: Midjourneyの画像生成機能と繋げる
     # TODO: multiple generation and select the best one
     print(f"create image with prompt: {ImageGenerationPrompt.format()}")
-    return Path("path/to/image.png")
+    return ctx.deps.image_generate_client.generate_image(ImageGenerationPrompt.format())
 
 
 async def generate_structured_prompt(prompt: str) -> ImageGenerationPrompt:
@@ -54,7 +62,7 @@ artist_agent = AgentFactory.create_agent(
 # ------------------------------ export ------------------------------
 
 
-async def run_artist_agent(runtime_prompt: str) -> Path:
+async def run_artist_agent(runtime_prompt: str, image_generate_client: IImageGenerateClient) -> Path:
     """
     run agent to create a new image
     Args:
@@ -65,5 +73,6 @@ async def run_artist_agent(runtime_prompt: str) -> Path:
     result = await artist_agent.run(
         runtime_prompt,
         result_type=Path,
+        deps=Deps(image_generate_client=image_generate_client),
     )
     return result.data
