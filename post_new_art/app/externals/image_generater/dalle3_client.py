@@ -4,10 +4,10 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from app.externals.image_generater.i_image_generate_client import IImageGenerateClient
+from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 
 
-class Dalle3Client(IImageGenerateClient):
+class Dalle3Client(I_ImageGenerateClient):
     def __init__(self, openai_client: OpenAI, save_dir: str = "./images"):
         self.client = openai_client
         self.save_dir = Path(save_dir)

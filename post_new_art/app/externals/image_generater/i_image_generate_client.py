@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 
-class IImageGenerateClient(ABC):
+class I_ImageGenerateClient(ABC):
     @abstractmethod
     def generate_image(self, prompt: str) -> Path:
         """
