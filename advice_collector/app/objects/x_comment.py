@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class XComment(BaseModel):
-    user: str  # TODO
+    user_id: str  # TODO
     text: str
 
 
