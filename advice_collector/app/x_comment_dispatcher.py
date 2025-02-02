@@ -1,8 +1,8 @@
 from pydantic_ai.agent import Agent
 
-from app.adviser_repository import IAdviserRepository
-from app.wallet_address import WalletAddress
-from app.x_comment import XComment, XCommetType
+from app.objects.wallet_address import WalletAddress
+from app.objects.x_comment import XComment, XCommetType
+from app.repositories.i_adviser_repository import IAdviserRepository
 
 
 class XCommentDispatcher:
@@ -29,7 +29,7 @@ class XCommentDispatcher:
             result = self.wallet_address_extract_agent.run_sync(comment.text)
             wallet_address: WalletAddress = result.data
 
-            self.adviser_repository.store_wallet_address(wallet_address)
+            self.adviser_repository.store_wallet_address(comment.user_id, wallet_address)
 
     def _dispatch_by_agent(self, comment: XComment) -> XCommetType:
         result = self.dispatch_agent.run_sync(comment.text)

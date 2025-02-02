@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from app.wallet_address import WalletAddress
-from app.x_comment import XComment
+from app.objects.wallet_address import WalletAddress
+from app.objects.x_comment import XComment
 
 
 class IAdviserRepository(ABC):
@@ -14,5 +14,5 @@ class IAdviserRepository(ABC):
         pass
 
     @abstractmethod
-    def store_wallet_address(self, wallet_address: WalletAddress):
+    def store_wallet_address(self, user_id: str, wallet_address: WalletAddress):
         pass
