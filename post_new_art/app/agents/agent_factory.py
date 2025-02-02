@@ -1,6 +1,9 @@
-from typing import Callable, Optional, Type, TypeVar
+import inspect
+from typing import Optional, Type, TypeVar
 
 from pydantic_ai.agent import Agent
+
+from app.agents.agent_persona import AgentPersona
 
 T = TypeVar("T")
 
@@ -8,13 +11,12 @@ T = TypeVar("T")
 class AgentFactory:
     """エージェントの初期化を管理するファクトリークラス"""
 
-    @staticmethod
+    @classmethod
     def create_agent(
-        name: str,
-        system_prompt: str,
+        cls,
+        persona: AgentPersona,
         model: str = "openai:gpt-4o-mini",
         result_type: Optional[Type[T]] = None,
-        tools: Optional[list[Callable]] = None,
     ) -> Agent:
         """
         エージェントを作成する共通メソッド
@@ -31,13 +33,19 @@ class AgentFactory:
         """
         agent_config = {
             "model": model,
-            "system_prompt": system_prompt,
+            "system_prompt": persona.role,
         }
 
-        if result_type:
-            agent_config["result_type"] = result_type
+        agent_config["result_type"] = persona.result_type
 
-        if tools:
-            agent_config["tools"] = tools
+        agent_config["tools"] = cls._extract_methods(persona)
 
         return Agent(**agent_config)
+
+    @staticmethod
+    def _extract_methods(instance):
+        return [
+            method
+            for method_name, method in inspect.getmembers(instance, predicate=inspect.ismethod)
+            if not method_name.startswith("_")
+        ]
