@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from pydantic_ai import Agent
-
 from app.agents.agent_persona import AgentPersona, Personality
+from app.externals.datastore.adviser_fetcher import AdviserFetcher
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 from app.image_generation_prompt import ImageGenerationPrompt
+from loguru import logger
+from pydantic_ai import Agent
 
 
 class Artist(AgentPersona):
@@ -22,11 +23,16 @@ class Artist(AgentPersona):
     result_type = Path
 
     def __init__(
-        self, personality: Personality, prompt_organizer_agent: Agent, image_generate_client: I_ImageGenerateClient
+        self,
+        personality: Personality,
+        prompt_organizer_agent: Agent,
+        image_generate_client: I_ImageGenerateClient,
+        adviser_fetcher: AdviserFetcher,
     ):
         self.personality = personality
         self.prompt_organizer_agent = prompt_organizer_agent
         self.image_generate_client = image_generate_client
+        self.adviser_fetcher = adviser_fetcher
 
     def create_image(self, ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
         """create an image by using prompt"""
@@ -35,13 +41,14 @@ class Artist(AgentPersona):
         print(f"create image with prompt: {ImageGenerationPrompt.format()}")
         return self.image_generate_client.generate_image(ImageGenerationPrompt.format())
 
-    def fetch_advices(self, prompt: str) -> list[str]:
+    def fetch_art_content_advices_from_audience(self) -> list[str]:
         """fetch advice comments from adviser-db"""
-        # TODO: 仮実装
-        return ["アドバイス1", "アドバイス2", "アドバイス3"]
+        logger.info("fetching art content advices from audience")
+        return self.adviser_fetcher.fetch_all_content_advises()
 
     async def generate_structured_prompt(self, prompt: str) -> ImageGenerationPrompt:
         """
         generate a structured image-generation prompt to improve the quality of prompt
         """
+        logger.info("generating structured image-generation prompt")
         return await self.prompt_organizer_agent.run(prompt)
