@@ -4,7 +4,7 @@ from app.agents.persona.prompt_organizer import PromptOrganizer
 
 def test_prompt_organizer_agent():
     prompt_organizer = PromptOrganizer()
-    prompt_organizer_agent = AgentFactory.create_agent(prompt_organizer)
+    prompt_organizer_agent = AgentFactory.create_from(prompt_organizer)
     sentense = [
         "Visualize a surreal blue canvas adorned with translucent clouds.",
         "The varying shades of blue merge into a rhythmic, enchanting display, evoking a sense of mystery and wonder.",

@@ -1,9 +1,8 @@
 import inspect
-from typing import Optional, Type, TypeVar
-
-from pydantic_ai.agent import Agent
+from typing import TypeVar
 
 from app.agents.agent_persona import AgentPersona
+from pydantic_ai.agent import Agent
 
 T = TypeVar("T")
 
@@ -12,11 +11,10 @@ class AgentFactory:
     """エージェントの初期化を管理するファクトリークラス"""
 
     @classmethod
-    def create_agent(
+    def create_from(
         cls,
         persona: AgentPersona,
         model: str = "openai:gpt-4o-mini",
-        result_type: Optional[Type[T]] = None,
     ) -> Agent:
         """
         エージェントを作成する共通メソッド
