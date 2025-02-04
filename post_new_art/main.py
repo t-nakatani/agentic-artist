@@ -1,8 +1,8 @@
 import asyncio
 
 from app.agents.agent_factory import AgentFactory
-from app.agents.persona.orchesrator import Orchestrator
-from app.agents.persona.prompt_organizer import PromptOrganizer
+from app.agents.role.orchesrator import Orchestrator
+from app.agents.role.prompt_organizer import PromptOrganizer
 from app.dependencies.artist_agent import artist_agent_deps
 from app.dependencies.sns_marketer_agent import sns_marketer_agent_deps
 

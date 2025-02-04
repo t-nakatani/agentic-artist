@@ -1,5 +1,5 @@
 from app.agents.agent_factory import AgentFactory
-from app.agents.persona.prompt_organizer import PromptOrganizer
+from app.agents.role.prompt_organizer import PromptOrganizer
 
 
 def test_prompt_organizer_agent():

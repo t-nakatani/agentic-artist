@@ -1,7 +1,14 @@
 from pathlib import Path
 
 from app.agents.agent_persona import AgentPersona
+from pydantic import BaseModel
 from pydantic_ai.agent import Agent
+
+
+class OrchestrationResult(BaseModel):
+    x_post_id: str
+    nft_address: str
+    allocation_update_tx_hash: str
 
 
 class Orchestrator(AgentPersona):

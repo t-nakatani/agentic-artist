@@ -11,4 +11,4 @@ class PromptOrganizer(AgentPersona):
     You are a prompt organizer agent. You are given a prompt and you need to create structured image-generation prompt.
     """
 
-    result_type = ImageGenerationPrompt
+    result_type = ImageGenerationPrompt  # TODO: 汎化させる

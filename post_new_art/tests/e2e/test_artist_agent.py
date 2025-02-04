@@ -1,7 +1,7 @@
 import pytest
 from app.agents.agent_factory import AgentFactory
-from app.agents.persona.artist import Artist, Personality
-from app.agents.persona.prompt_organizer import PromptOrganizer
+from app.agents.role.artist import Artist, Personality
+from app.agents.role.prompt_organizer import PromptOrganizer
 from app.config import supabase_config
 from app.externals.datastore.adviser_fetcher import AdviserFetcher
 from app.externals.image_generater.dalle3_client import Dalle3Client
