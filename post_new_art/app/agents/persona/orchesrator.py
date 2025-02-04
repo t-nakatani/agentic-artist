@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from pydantic_ai.agent import Agent
-
 from app.agents.agent_persona import AgentPersona
+from pydantic_ai.agent import Agent
 
 
 class Orchestrator(AgentPersona):
@@ -12,9 +11,15 @@ class Orchestrator(AgentPersona):
     """
     result_type = None
 
-    def __init__(self, artist_agent: Agent, image_generator_agent: Agent):
+    def __init__(self, artist_agent: Agent, sns_marketer_agent: Agent):
         self.artist_agent = artist_agent
-        self.image_generator_agent = image_generator_agent
+        self.sns_marketer_agent = sns_marketer_agent
 
     async def request_image_generation(self, prompt: str) -> Path:
         return await self.artist_agent.run(prompt)
+
+    async def request_post_to_sns(self, image_paths: list[Path], prompt: str) -> str:
+        return await self.sns_marketer_agent.run(prompt, deps=image_paths)
+
+    # async def create_nft(self, image_path: Path) -> str:
+    #     return await self.nft_client.create_nft(image_path)
