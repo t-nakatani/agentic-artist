@@ -8,7 +8,7 @@ T = TypeVar("T")
 
 
 class AgentFactory:
-    """エージェントの初期化を管理するファクトリークラス"""
+    """A factory class for initializing agents"""
 
     @classmethod
     def create_from(
@@ -17,17 +17,17 @@ class AgentFactory:
         model: str = "openai:gpt-4o-mini",
     ) -> Agent:
         """
-        エージェントを作成する共通メソッド
+        create an agent from a persona
 
         Args:
-            name: エージェントの名前
-            system_prompt: システムプロンプト
-            model: 使用するモデル名
-            result_type: 戻り値の型
-            tools: 使用するツールのリスト
+            name: the name of the agent
+            system_prompt: the system prompt
+            model: the model name
+            result_type: the type of the result
+            tools: the list of the tools
 
         Returns:
-            Agent: 初期化されたエージェント
+            Agent: the initialized agent
         """
         agent_config = {
             "model": model,
