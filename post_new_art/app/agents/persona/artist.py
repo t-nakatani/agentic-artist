@@ -34,13 +34,6 @@ class Artist(AgentPersona):
         self.image_generate_client = image_generate_client
         self.adviser_fetcher = adviser_fetcher
 
-    def create_image(self, ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
-        """create an image by using prompt"""
-        # TODO: Midjourneyの画像生成機能と繋げる
-        # TODO: multiple generation and select the best one
-        print(f"create image with prompt: {ImageGenerationPrompt.format()}")
-        return self.image_generate_client.generate_image(ImageGenerationPrompt.format())
-
     def fetch_art_content_advices_from_audience(self) -> list[str]:
         """fetch advice comments from adviser-db"""
         logger.info("fetching art content advices from audience")
@@ -52,3 +45,10 @@ class Artist(AgentPersona):
         """
         logger.info("generating structured image-generation prompt")
         return await self.prompt_organizer_agent.run(prompt)
+
+    def create_image(self, ImageGenerationPrompt: ImageGenerationPrompt) -> Path:
+        """create an image by using prompt"""
+        # TODO: Midjourneyの画像生成機能と繋げる
+        # TODO: multiple generation and select the best one
+        logger.info(f"create image with prompt: {ImageGenerationPrompt.format()}")
+        return self.image_generate_client.generate_image(ImageGenerationPrompt.format())
