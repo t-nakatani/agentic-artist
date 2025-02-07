@@ -13,4 +13,7 @@ dependencies = [
     "pytest-asyncio>=0.25.3",
     "loguru>=0.7.3",
     "tweepy>=4.15.0",
+    "cdp-langchain==0.0.13",
+    "fastapi>=0.109.2",
+    "uvicorn>=0.27.1"
 ]
