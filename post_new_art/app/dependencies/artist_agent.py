@@ -4,6 +4,7 @@ from app.agents.role.artist import Artist
 from app.config import supabase_config
 from app.externals.datastore.adviser_fetcher import AdviserFetcher
 from app.externals.image_generater.dalle3_client import Dalle3Client
+from app.externals.image_generater.mdjn_cient import MdjnClient
 from openai import OpenAI
 from pydantic_ai import Agent
 from supabase import create_client
@@ -11,6 +12,7 @@ from supabase import create_client
 
 def artist_agent_deps(prompt_organizer_agent: Agent):
     openai_client = OpenAI()
+    # mdjn_client = MidjourneyClient()
     dalle3_client = Dalle3Client(openai_client=openai_client)
     supabase = create_client(supabase_url=supabase_config.supabase_url, supabase_key=supabase_config.supabase_key)
     adviser_fetcher = AdviserFetcher(supabase=supabase)
