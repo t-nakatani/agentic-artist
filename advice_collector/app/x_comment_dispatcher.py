@@ -1,3 +1,4 @@
+from loguru import logger
 from pydantic_ai.agent import Agent
 
 from app.objects.wallet_address import WalletAddress
@@ -19,18 +20,29 @@ class XCommentDispatcher:
         )
         self.adviser_repository = adviser_repository
 
-    def store_comment_in_db(self, comment: XComment) -> None:
+    def handle(self, comment: XComment) -> None:
         comment_type = self._dispatch_by_agent(comment)
-        if comment_type in [XCommetType.CONTENT_POSITIVE_ADVICE, XCommetType.CONTENT_NEGATIVE_ADVICE]:
+
+        self._store_comment(comment, comment_type)
+
+        # TODO: judge if the comment is useful and uddate allocation here
+
+    def _dispatch_by_agent(self, comment: XComment) -> XCommetType:
+        result = self.dispatch_agent.run_sync(comment.text)
+        return result.data
+
+    def _store_comment(self, comment: XComment, comment_type: XCommetType) -> None:
+        if comment_type.is_content_advice():
             self.adviser_repository.store_contents_advice(comment)
+
         elif comment_type == XCommetType.POSTING_ADVICE:
             self.adviser_repository.store_posting_advice(comment)
+
         elif comment_type == XCommetType.REGISTER_WALLET_ADDRESS:
             result = self.wallet_address_extract_agent.run_sync(comment.text)
             wallet_address: WalletAddress = result.data
 
             self.adviser_repository.store_wallet_address(comment.user_id, wallet_address)
-
-    def _dispatch_by_agent(self, comment: XComment) -> XCommetType:
-        result = self.dispatch_agent.run_sync(comment.text)
-        return result.data
+        else:
+            logger.error(f"dispatch error: {comment.text}")
+            raise ValueError(f"dispatch error: {comment.text}")
