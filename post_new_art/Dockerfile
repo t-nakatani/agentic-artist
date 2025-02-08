@@ -1,5 +1,5 @@
 # ビルドステージ
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 # 必要なビルドツールをインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -29,7 +29,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 # アプリケーションコードをコピー
 COPY app app/
-COPY index.py ./
+COPY main.py index.py ./
 
 # 非rootユーザーを作成
 RUN useradd -m appuser && \
@@ -40,7 +40,7 @@ USER appuser
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH="/home/appuser/.local/bin:$PATH" \
-    PYTHONPATH="/app:$PYTHONPATH"
+    PYTHONPATH="/app"
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
