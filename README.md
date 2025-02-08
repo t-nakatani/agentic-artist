@@ -1,4 +1,12 @@
+# Agentic Artist
 
-## idea
-- 画像生成は定期実行系の方が相性良さそう
-  - ハッカソンでは、違う形でいいかも
+## Components
+
+### Advice Collector
+Receives and stores user advice from X (formerly Twitter)
+
+### Post New Art
+Generates new art and posts it to X
+
+### Contracts
+Manages contracts such as user allocation management
