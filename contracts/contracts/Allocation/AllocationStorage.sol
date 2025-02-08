@@ -35,11 +35,9 @@ contract AllocationStorage {
         return remainingAllocation;
     }
 
-    function updateAllocation(address _address, uint256 _allocation) external onlyOwner {
+    function addAllocation(address _address, uint256 _allocation) external onlyOwner {
         require(_allocation <= remainingAllocation, "Allocation exceeds remaining allocation");
         remainingAllocation -= _allocation;
-        allocation[_address] = _allocation;
+        allocation[_address] += _allocation;
     }
-
-
 }
