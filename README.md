@@ -1,4 +1,4 @@
-<img width="1369" alt="image" src="https://github.com/user-attachments/assets/f2ed2868-fcf2-4746-a4aa-362a78e30dfb" /># Agentic Artist
+# Agentic Artist
 
 ## Components
 
