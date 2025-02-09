@@ -7,6 +7,15 @@ import requests
 
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 
+STORAGE_BASE_URL = "https://lipbpiidmsjeuqemorzv.supabase.co/storage/v1/object/public/images/mdjn/"
+MIDJOURNEY_BASE_URL = "https://cdn.midjourney.com/"
+MIDJOURNEY_SUFFIX = "/0_0.png"
+
+def convert_midjourney_to_storage_url(midjourney_url: str) -> str:
+    if not midjourney_url.startswith(MIDJOURNEY_BASE_URL):
+        raise ValueError("無効なMidjourney URLです")
+    image_id = midjourney_url[len(MIDJOURNEY_BASE_URL):len(midjourney_url)-len(MIDJOURNEY_SUFFIX)]
+    return STORAGE_BASE_URL + image_id
 
 class MdjnClient(I_ImageGenerateClient):
     def __init__(self, openai_client: OpenAI, save_dir: str = "./images"):
@@ -29,16 +38,15 @@ class MdjnClient(I_ImageGenerateClient):
         payload = {"prompt": prompt}
         response = requests.post(url, json=payload)
         img_url = response.json()["img_url"]
+        storage_url = convert_midjourney_to_storage_url(img_url)
+        saved_path = self.save_dir / storage_url
+        response = requests.get(storage_url, stream=True)
+        with open(saved_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
 
-        # Download image from Midjourney CDN
-        img_response = requests.get(img_url)
-        img_response.raise_for_status()
-
-        # Save image with timestamp
-        timestamp = int(time.time())
-        saved_path = self.save_dir / f"midjourney_{timestamp}.png"
-
-        with open(saved_path, "wb") as f:
-            f.write(img_response.content)
-
+        
         return saved_path
+
+
+
