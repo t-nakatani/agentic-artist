@@ -1,8 +1,10 @@
 from pathlib import Path
 
 from app.agents.agent_persona import AgentPersona
+from app.externals.datastore.adviser_fetcher import Advice, AdviserFetcher
 from pydantic import BaseModel
 from pydantic_ai.agent import Agent
+from loguru import logger
 
 
 class OrchestrationResult(BaseModel):
@@ -14,16 +16,25 @@ class OrchestrationResult(BaseModel):
 class Orchestrator(AgentPersona):
     role = """
         You are an orchestrator agent. You are given following agents and you need to orchestrate them.
+        - adviser_fetcher
         - artist
+        - sns_marketer
     """
     result_type = None
 
-    def __init__(self, artist_agent: Agent, sns_marketer_agent: Agent):
+    def __init__(self, adviser_fetcher: AdviserFetcher, artist_agent: Agent, sns_marketer_agent: Agent):
+        self.adviser_fetcher = adviser_fetcher
         self.artist_agent = artist_agent
         self.sns_marketer_agent = sns_marketer_agent
 
-    async def request_image_generation(self, prompt: str) -> Path:
-        return await self.artist_agent.run(prompt)
+    def fetch_art_content_advices_from_audience(self) -> list[Advice]:
+        """fetch advice comments from adviser-db"""
+        logger.info("fetching art content advices from audience")
+        return self.adviser_fetcher.fetch_all_content_advices()
+
+    async def request_image_generation(self, prompt: str, most_important_advice: Advice) -> Path:
+        """request image generation from artist agent"""
+        return await self.artist_agent.run(prompt, deps=most_important_advice)
 
     async def request_post_to_sns(self, image_paths: list[Path], prompt: str) -> str:
         return await self.sns_marketer_agent.run(prompt, deps=image_paths)
