@@ -1,10 +1,10 @@
 import asyncio
 
 from app.agents.agent_factory import AgentFactory
-from app.agents.role.orchesrator import Orchestrator
+from app.agents.role.orchestrator import Orchestrator
 from app.agents.role.prompt_organizer import PromptOrganizer
-from app.dependencies.artist_agent import artist_agent_deps
-from app.dependencies.sns_marketer_agent import sns_marketer_agent_deps
+from app.agents.dependencies.artist_agent import artist_agent_deps
+from app.agents.dependencies.sns_marketer_agent import sns_marketer_agent_deps
 
 # def pinata_deps():
 #     return PinataClient(api_key=pinata_config.api_key, api_secret=pinata_config.api_secret)
@@ -20,6 +20,7 @@ async def run(prompt: str):
     orchestrator_agent = AgentFactory.create_from(orchestrator)
     result = await orchestrator_agent.run(prompt)
     return result.data
+
 
 async def main():
     prompt_organizer = PromptOrganizer()
