@@ -36,8 +36,16 @@ async def main():
     orchestrator = Orchestrator(adviser_fetcher, artist_agent, sns_marketer_agent)
     orchestrator_agent = AgentFactory.create_from(orchestrator)
 
-    result = await orchestrator_agent.run("generate a beautiful image of a cat and post it to X(Twitter)")
-    print(result.data)
+    main_runtime_prompt = """
+        Think your own prompt to generate profile images that resonate with degens and post it to X(Twitter)
+    """
+    example_image_generation_prompt = """
+    Design a dynamic character portrait of a cybernetic samurai clad in digital armor adorned with futuristic emblems.
+    Use a cool blue and silver palette with neon highlights against a backdrop of a high-tech cityscape, evoking an aura of elite sophistication.
+    """
+    await orchestrator_agent.run(
+        f"{main_runtime_prompt=}\n{example_image_generation_prompt=}",
+    )
 
 
 if __name__ == "__main__":

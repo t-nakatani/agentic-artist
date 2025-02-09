@@ -36,8 +36,10 @@ class Orchestrator(AgentPersona):
         """request image generation from artist agent"""
         return await self.artist_agent.run(prompt, deps=most_important_advice)
 
-    async def request_post_to_sns(self, image_paths: list[Path], prompt: str) -> str:
-        return await self.sns_marketer_agent.run(prompt, deps=image_paths)
+    async def request_post_to_sns(self, image_path: Path, prompt: str) -> str:
+        """request post to sns from sns_marketer agent"""
+        logger.info(f"image_path: {image_path}")
+        return await self.sns_marketer_agent.run(prompt, deps=image_path)
 
     # async def create_nft(self, image_path: Path) -> str:
     #     return await self.nft_client.create_nft(image_path)

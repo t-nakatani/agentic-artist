@@ -6,7 +6,6 @@ from pydantic_ai.format_as_xml import format_as_xml
 
 class Style(Enum):
     POP_ART = "pop_art"
-    REALISM = "realism"
     ABSTRACT = "abstract"
     ANIME = "anime"
     OTAKU = "otaku"
