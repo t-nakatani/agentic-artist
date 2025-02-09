@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Type
+from typing import Type, Optional
 
 from pydantic import BaseModel
 
@@ -11,3 +11,4 @@ class Personality(BaseModel):
 class AgentPersona(ABC):
     role: str
     result_type: Type
+    deps: Optional[Type] = None
