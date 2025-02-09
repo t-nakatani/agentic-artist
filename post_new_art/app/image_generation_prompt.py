@@ -1,10 +1,15 @@
 from enum import Enum
 
 from pydantic import BaseModel
+from pydantic_ai.format_as_xml import format_as_xml
 
 
 class Style(Enum):
     POP_ART = "pop_art"
+    REALISM = "realism"
+    ABSTRACT = "abstract"
+    ANIME = "anime"
+    OTAKU = "otaku"
     OTHER = "other"
 
 
@@ -17,7 +22,6 @@ class ImageGenerationPrompt(BaseModel):
     main_color: str
 
     def format(self) -> str:
-        # [仮実装] TODO: roo-clineを参考にして、構造データであることを活かす
-        return (
-            f"{self.theme} {self.style} {self.subject} {self.background} {self.main_color} {self.detailed_description}"
-        )
+        dict_prompt = self.model_dump()
+        dict_prompt["style"] = dict_prompt["style"].value
+        return format_as_xml(dict_prompt, root_tag="image_generation_prompt")
