@@ -3,7 +3,7 @@ import asyncio
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from main import run
+from main import generate_new_art
 
 app = FastAPI()
 
@@ -19,7 +19,7 @@ async def health():
 
 @app.post("/generate-art")
 async def generate_art(request: GenerateArtRequest):
-    asyncio.create_task(run(request.prompt))
+    asyncio.create_task(generate_new_art(request.prompt))
     return {"status": "accepted", "message": "generate-art request accepted"}
 
 

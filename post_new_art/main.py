@@ -14,19 +14,19 @@ from app.externals.datastore.adviser_fetcher import AdviserFetcher
 #     return PinataClient(api_key=pinata_config.api_key, api_secret=pinata_config.api_secret)
 
 
-async def run(prompt: str):
-    prompt_organizer = PromptOrganizer()
-    prompt_organizer_agent = AgentFactory.create_from(prompt_organizer)
-    artist_agent = artist_agent_deps(prompt_organizer_agent)
-    sns_marketer_agent = sns_marketer_agent_deps()
+# async def run(prompt: str):
+#     prompt_organizer = PromptOrganizer()
+#     prompt_organizer_agent = AgentFactory.create_from(prompt_organizer)
+#     artist_agent = artist_agent_deps(prompt_organizer_agent)
+#     sns_marketer_agent = sns_marketer_agent_deps()
 
-    orchestrator = Orchestrator(artist_agent, sns_marketer_agent)
-    orchestrator_agent = AgentFactory.create_from(orchestrator)
-    result = await orchestrator_agent.run(prompt)
-    return result.data
+#     orchestrator = Orchestrator(artist_agent, sns_marketer_agent)
+#     orchestrator_agent = AgentFactory.create_from(orchestrator)
+#     result = await orchestrator_agent.run(prompt)
+#     return result.data
 
 
-async def main():
+async def generate_new_art(dummy_prompt: str):
     supabase = create_client(supabase_url=supabase_config.supabase_url, supabase_key=supabase_config.supabase_key)
     adviser_fetcher = AdviserFetcher(supabase=supabase)
     prompt_organizer = PromptOrganizer()
@@ -50,4 +50,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(generate_new_art())
