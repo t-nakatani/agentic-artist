@@ -2,15 +2,16 @@ import os
 import time
 from pathlib import Path
 
-from openai import OpenAI
+
 import requests
 
+from app.externals.image_generater.image_downloader import ImageDownloader
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 
 
-class MdjnClient(I_ImageGenerateClient):
-    def __init__(self, openai_client: OpenAI, save_dir: str = "./images"):
-        self.client = openai_client
+class MidjourneyClient(I_ImageGenerateClient):
+    def __init__(self, image_downloader: ImageDownloader, save_dir: str = "./images"):
+        self.image_downloader = image_downloader
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -31,14 +32,8 @@ class MdjnClient(I_ImageGenerateClient):
         img_url = response.json()["img_url"]
 
         # Download image from Midjourney CDN
-        img_response = requests.get(img_url)
-        img_response.raise_for_status()
-
-        # Save image with timestamp
         timestamp = int(time.time())
-        saved_path = self.save_dir / f"midjourney_{timestamp}.png"
+        output_path = self.save_dir / f"midjourney_{timestamp}.png"
+        self.image_downloader.download(img_url, output_path)
 
-        with open(saved_path, "wb") as f:
-            f.write(img_response.content)
-
-        return saved_path
+        return output_path

@@ -15,5 +15,7 @@ dependencies = [
     "tweepy>=4.15.0",
     "cdp-langchain==0.0.13",
     "fastapi>=0.109.2",
-    "uvicorn>=0.27.1"
+    "uvicorn>=0.27.1",
+    "playwright>=1.50.0",
+    "pillow>=11.1.0",
 ]
