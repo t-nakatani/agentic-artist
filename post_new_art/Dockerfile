@@ -15,7 +15,8 @@ COPY pyproject.toml uv.lock ./
 # uvをインストールして依存関係をインストール
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir uv && \
-    uv pip install --system .
+    uv pip install --system . && \
+    uvx playwright install
 
 # 実行ステージ
 FROM python:3.12-slim
