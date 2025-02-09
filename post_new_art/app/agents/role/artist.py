@@ -1,11 +1,12 @@
 from pathlib import Path
 
+from loguru import logger
+from pydantic_ai import Agent, RunContext
+
 from app.agents.agent_persona import AgentPersona, Personality
 from app.externals.datastore.adviser_fetcher import Advice
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 from app.image_generation_prompt import ImageGenerationPrompt
-from loguru import logger
-from pydantic_ai import Agent, RunContext
 
 
 class Artist(AgentPersona):

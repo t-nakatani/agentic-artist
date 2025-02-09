@@ -1,13 +1,14 @@
 import asyncio
 
+from supabase import create_client
+
 from app.agents.agent_factory import AgentFactory
-from app.agents.role.orchestrator import Orchestrator
-from app.agents.role.prompt_organizer import PromptOrganizer
 from app.agents.dependencies.artist_agent import artist_agent_deps
 from app.agents.dependencies.sns_marketer_agent import sns_marketer_agent_deps
+from app.agents.role.orchestrator import Orchestrator
+from app.agents.role.prompt_organizer import PromptOrganizer
 from app.config import supabase_config
 from app.externals.datastore.adviser_fetcher import AdviserFetcher
-from supabase import create_client
 
 # def pinata_deps():
 #     return PinataClient(api_key=pinata_config.api_key, api_secret=pinata_config.api_secret)

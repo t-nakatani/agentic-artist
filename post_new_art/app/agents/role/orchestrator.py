@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from app.agents.agent_persona import AgentPersona
-from app.externals.datastore.adviser_fetcher import Advice, AdviserFetcher
+from loguru import logger
 from pydantic import BaseModel
 from pydantic_ai.agent import Agent
-from loguru import logger
+
+from app.agents.agent_persona import AgentPersona
+from app.externals.datastore.adviser_fetcher import Advice, AdviserFetcher
 
 
 class OrchestrationResult(BaseModel):

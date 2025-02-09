@@ -2,11 +2,10 @@ import os
 import time
 from pathlib import Path
 
-
 import requests
 
-from app.externals.image_generater.image_downloader import ImageDownloader
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
+from app.externals.image_generater.image_downloader import ImageDownloader
 
 
 class MidjourneyClient(I_ImageGenerateClient):

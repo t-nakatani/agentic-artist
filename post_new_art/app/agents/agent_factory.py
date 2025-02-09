@@ -1,8 +1,9 @@
 import inspect
 from typing import TypeVar
 
-from app.agents.agent_persona import AgentPersona
 from pydantic_ai.agent import Agent
+
+from app.agents.agent_persona import AgentPersona
 
 T = TypeVar("T")
 

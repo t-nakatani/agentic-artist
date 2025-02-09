@@ -1,4 +1,5 @@
 import tweepy
+
 from app.agents.agent_factory import AgentFactory
 from app.agents.role.sns_marketer import SnsMarketer
 from app.config import x_settings
