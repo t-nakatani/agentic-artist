@@ -15,7 +15,7 @@ module "post_new_art" {
   container_port = 8000
   cpu            = 256
   memory         = 512
-  env_files      = local.env_files
+  env_files      = local.post_new_art_env_files
 
   desired_count    = 1
   assign_public_ip = true
@@ -30,7 +30,7 @@ module "midjourney_api" {
   container_port = local.midjourney_api_port
   cpu            = 256
   memory         = 512
-  env_files      = local.env_files
+  env_files      = local.midjourney_api_env_files
 
   desired_count    = 1
   assign_public_ip = false

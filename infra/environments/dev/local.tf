@@ -1,16 +1,16 @@
 locals {
   midjourney_api_port = 3000
-  env_files = [
+  post_new_art_env_files = [
     {
-      value = "arn:aws:s3:::lud-env-files/heterod0x/agentic-artist/.env",
+      value = "arn:aws:s3:::lud-env-files/heterod0x/agentic-artist/artist-agent-api/.env",
       type  = "s3"
     }
   ]
 
-  env_variables = [
+  midjourney_api_env_files = [
     {
-      name  = "ENVIRONMENT"
-      value = "dev"
+      value = "arn:aws:s3:::lud-env-files/heterod0x/agentic-artist/midjourney-api/.env",
+      type  = "s3"
     }
   ]
 }
