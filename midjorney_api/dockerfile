@@ -1,0 +1,21 @@
+# Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# package.jsonとpackage-lock.jsonをコピー
+COPY package*.json ./
+
+# プロダクション依存関係のみをインストール
+RUN npm ci --only=production
+
+# ビルド済みのdistディレクトリをコピー
+COPY dist/ ./dist/
+
+# 非rootユーザーで実行
+USER node
+
+# Node.jsにESMを使用することを明示的に伝える
+ENV NODE_OPTIONS="--experimental-specifier-resolution=node"
+
+CMD ["node", "--experimental-modules", "dist/index.js"]
