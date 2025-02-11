@@ -1,5 +1,5 @@
 # ビルドステージ
-FROM python:3.12-slim AS builder
+FROM python:3.12-slim
 
 # 必要なビルドツールをインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,19 +15,8 @@ COPY pyproject.toml uv.lock ./
 # uvをインストールして依存関係をインストール
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir uv && \
-    uv pip install --system .
-
-# 実行ステージ
-FROM python:3.12-slim
-
-# 作業ディレクトリを設定
-WORKDIR /app
-
-# ビルドステージから必要なファイルをコピー
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-RUN playwright install
+    uv pip install --system . && \
+    uvx playwright install --with-deps
 
 # アプリケーションコードをコピー
 COPY app app/
@@ -49,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD python -c "import http.client; conn = http.client.HTTPConnection('localhost:8000'); conn.request('GET', '/'); response = conn.getresponse(); exit(0) if response.status == 200 else exit(1)"
 
 # コンテナ起動時のコマンド
-CMD ["uvicorn", "index:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "index:app", "--host", "0.0.0.0", "--port", "8000"]
