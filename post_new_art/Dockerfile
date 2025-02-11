@@ -15,8 +15,7 @@ COPY pyproject.toml uv.lock ./
 # uvをインストールして依存関係をインストール
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir uv && \
-    uv pip install --system . && \
-    uvx playwright install
+    uv pip install --system .
 
 # 実行ステージ
 FROM python:3.12-slim
@@ -27,6 +26,8 @@ WORKDIR /app
 # ビルドステージから必要なファイルをコピー
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
+
+RUN playwright install
 
 # アプリケーションコードをコピー
 COPY app app/
@@ -45,7 +46,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD python -c "import http.client; conn = http.client.HTTPConnection('localhost:8000'); conn.request('GET', '/health'); response = conn.getresponse(); exit(0) if response.status == 200 else exit(1)"
+    CMD python -c "import http.client; conn = http.client.HTTPConnection('localhost:8000'); conn.request('GET', '/'); response = conn.getresponse(); exit(0) if response.status == 200 else exit(1)"
 
 # コンテナ起動時のコマンド
 CMD ["uvicorn", "index:app", "--host", "0.0.0.0", "--port", "8000"]
