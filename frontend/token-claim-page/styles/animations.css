@@ -1,0 +1,11 @@
+.banner-container:hover .animate-scroll {
+  animation-play-state: paused;
+}
+
+.banner-image {
+  transition: transform 0.3s ease;
+}
+
+.banner-image:hover {
+  transform: scale(1.1);
+} 
