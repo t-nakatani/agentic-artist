@@ -16,4 +16,5 @@ module "ecs" {
   ecr_repository_url = module.ecr.repository_url
   env_files          = var.env_files
   env_variables      = var.env_variables
+  assign_public_ip   = false  # プライベートサブネットで実行するため
 } 

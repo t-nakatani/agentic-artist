@@ -6,4 +6,4 @@ output "cluster_name" {
 output "service_name" {
   description = "ECSサービスの名前"
   value       = aws_ecs_service.app.name
-} 
+}

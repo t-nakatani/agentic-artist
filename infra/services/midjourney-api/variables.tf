@@ -1,13 +1,13 @@
 variable "app_name" {
   description = "アプリケーション名"
   type        = string
-  default     = "post-new-art"
+  default     = "midjourney-api"
 }
 
 variable "container_port" {
   description = "コンテナのポート番号"
   type        = number
-  default     = 8000
+  default     = 3000
 }
 
 variable "cpu" {

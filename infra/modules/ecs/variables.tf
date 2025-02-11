@@ -63,8 +63,6 @@ variable "assign_public_ip" {
   default     = true
 } 
 
-
-
 variable "log_retention_in_days" {
   description = "CloudWatch Logsの保持期間（日数）"
   type        = number

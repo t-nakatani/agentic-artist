@@ -6,4 +6,4 @@ output "vpc_id" {
 output "subnet_ids" {
   description = "サブネットのID一覧"
   value       = aws_subnet.public[*].id
-} 
+}
