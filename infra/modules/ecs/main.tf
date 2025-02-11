@@ -60,4 +60,4 @@ resource "aws_ecs_service" "app" {
     security_groups  = [aws_security_group.ecs_tasks.id]
     assign_public_ip = var.assign_public_ip
   }
-} 
+}
