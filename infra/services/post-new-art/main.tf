@@ -1,19 +1,23 @@
-module "ecr" {
-  source = "../../modules/ecr"
-
-  app_name = var.app_name
+resource "aws_ecs_cluster" "main" {
+  name = var.app_name
 }
 
-module "ecs" {
-  source = "../../modules/ecs"
+resource "aws_ecs_service" "main" {
+  name            = var.app_name
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
 
-  app_name           = var.app_name
-  vpc_id             = var.vpc_id
-  subnet_ids         = var.subnet_ids
-  container_port     = var.container_port
-  cpu                = var.cpu
-  memory             = var.memory
-  ecr_repository_url = module.ecr.repository_url
-  env_files          = var.env_files
-  env_variables      = var.env_variables
-} 
+  network_configuration {
+    subnets          = var.subnet_ids
+    security_groups  = [aws_security_group.ecs_tasks.id]
+    assign_public_ip = false
+  }
+}
+
+# CloudWatch Logsの設定
+resource "aws_cloudwatch_log_group" "ecs" {
+  name              = "/ecs/${var.app_name}"
+  retention_in_days = 30
+}

@@ -28,23 +28,17 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "env_files" {
-  description = "A list of files to be passed to ECS as environment variables."
-  type        = list(object({
-    value = string
-    type  = string
-  }))
-  default     = null
-}
-
-variable "env_variables" {
+variable "post_new_art_env_files" {
   description = "コンテナの環境変数"
-  type = list(object({
-    name  = string
-    value = string
-  }))
+  type = list(map(string))
   default = null
 }
+
+variable "midjourney_env_files" {
+  type        = list(map(string))
+  description = "Midjourney APIの環境変数ファイル"
+  default     = null
+} 
 
 variable "desired_count" {
   description = "実行するタスクの数"
@@ -66,4 +60,4 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "使用するサブネットのID一覧"
   type        = list(string)
-} 
+}
