@@ -1,9 +1,10 @@
-import os
 import time
 from pathlib import Path
 
 import requests
+from loguru import logger
 
+from app.config import midjourney_config
 from app.externals.image_generater.i_image_generate_client import I_ImageGenerateClient
 from app.externals.image_generater.image_downloader import ImageDownloader
 
@@ -25,7 +26,8 @@ class MidjourneyClient(I_ImageGenerateClient):
         Returns:
             生成された画像のパス
         """
-        url = os.getenv("MDJN_SERVER_ENDPOINT", "http://localhost:3030/generate")
+        url = midjourney_config.mdjn_server_endpoint
+        logger.debug(f"url: {url}")
         payload = {"prompt": prompt}
         response = requests.post(url, json=payload)
         img_url = response.json()["img_url"]
