@@ -3,26 +3,20 @@ resource "aws_security_group" "ecs_tasks" {
   description = "Allow inbound traffic for ECS tasks"
   vpc_id      = var.vpc_id
 
-  # post-new-artコンテナ用のインバウンドルール
+  # post-new-artコンテナ用のインバウンドルール（APIエンドポイント用）
   ingress {
     from_port       = var.container_port
     to_port         = var.container_port
     protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]  # APIは外部公開
   }
 
-  # midjourney-apiコンテナ用のインバウンドルール
+  # コンテナ間通信用のインバウンドルール（post-new-art -> midjourney-api）
   ingress {
-    from_port       = 3000
-    to_port         = 3000
-    protocol        = "tcp"
-  }
-
-  # コンテナ間通信用のインバウンドルール
-  ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    self      = true
+    from_port = 3000
+    to_port   = 3000
+    protocol  = "tcp"
+    self      = true  # 同じセキュリティグループ内からのアクセスのみ許可
   }
 
   egress {

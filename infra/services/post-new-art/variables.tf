@@ -38,7 +38,7 @@ variable "midjourney_env_files" {
   type        = list(map(string))
   description = "Midjourney APIの環境変数ファイル"
   default     = null
-} 
+}
 
 variable "desired_count" {
   description = "実行するタスクの数"
