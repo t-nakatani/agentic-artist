@@ -50,4 +50,4 @@ async def generate_new_art(dummy_prompt: str):
 
 
 if __name__ == "__main__":
-    asyncio.run(generate_new_art())
+    asyncio.run(generate_new_art("dummy_prompt"))

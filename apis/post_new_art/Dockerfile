@@ -16,7 +16,7 @@ COPY pyproject.toml uv.lock ./
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir uv && \
     uv pip install --system . && \
-    uvx playwright install --with-deps
+    uvx playwright install --with-deps --only-shell
 
 # アプリケーションコードをコピー
 COPY app app/
