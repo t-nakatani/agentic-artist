@@ -2,6 +2,10 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
+class PlaywrightConfig(BaseSettings):
+    browser_executable_path: Optional[str] = Field(None, json_schema_extra={"env": "BROWSER_EXECUTABLE_PATH"})
+
+
 class PinataConfig(BaseSettings):
     pinata_api_key: str = Field(..., json_schema_extra={"env": "PINATA_API_KEY"})
     pinata_api_secret: str = Field(..., json_schema_extra={"env": "PINATA_API_SECRET"})
@@ -24,6 +28,7 @@ class MidjourneyConfig(BaseSettings):
     mdjn_server_endpoint: str = Field(..., json_schema_extra={"env": "MDJN_SERVER_ENDPOINT"})
 
 
+playwright_config = PlaywrightConfig()
 pinata_config = PinataConfig()
 supabase_config = SupabaseConfig()
 x_config = XConfig()
